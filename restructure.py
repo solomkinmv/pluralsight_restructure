@@ -54,11 +54,11 @@ def restructure_course(course_dir):
 
     module_id_to_title = {}
     clip_id_to_title = {}
-    for module in meta_data['modules']:
-        module_id_to_title[module['id']] = module['title']
+    for module_index, module in enumerate(meta_data['modules']):
+        module_id_to_title[module['id']] = str(module_index + 1) + '. ' + module['title']
 
-        for clip in module['clips']:
-            clip_id_to_title[clip['id']] = clip['title']
+        for clip_index, clip in enumerate(module['clips']):
+            clip_id_to_title[clip['id']] = str(clip_index + 1) + '. ' + clip['title']
 
     hashed_to_video = build_hashed_to_videos()
     videos = map(lambda hashed_video: hashed_to_video(hashed_video, module_id_to_title, clip_id_to_title), hashed_videos)
