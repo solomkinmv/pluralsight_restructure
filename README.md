@@ -2,7 +2,8 @@ Restructures plularlsight course data downloaded with Charles.
 
 Lookups for directories with following structure:
 
- ❯ tree                                                                                                                                                                                                                                                      [23:34:42]
+```
+ ❯ tree                                                                                                                                                                                                                                                      
 .
 ├── docker-deep-dive-update.json
 └── vid.pluralsight.com
@@ -23,3 +24,4 @@ Lookups for directories with following structure:
     │   │                   └── 1280x720mp4
     │   │                       └── 20171230033118.mp4
 ...
+```
