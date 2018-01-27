@@ -100,7 +100,8 @@ def lookup_title_by_hash(id_part, id_to_title_map):
             results.append(id_to_title_map[key])
 
     if len(results) != 1:
-        raise Exception(f"Wrong number of filtered elements. Expected to be 1, but received: {results} from {id_to_title_map} for hash {hash}")
+        print(f"Wrong number of filtered elements. Expected to be 1, but received: {results} from {id_to_title_map} for hash {id_part}")
+        return None
 
     return results[0]
 
@@ -118,19 +119,39 @@ def build_hashed_to_videos():
         if clip_hash not in clip_hash_to_title:
             clip_hash_to_title[clip_hash] = lookup_title_by_hash(clip_hash, clip_id_to_title)
 
-        return Video(module_hash_to_title[module_hash], clip_hash_to_title[clip_hash], hashed_video.video_path)
+        module_title = module_hash_to_title[module_hash]
+        clip_title = clip_hash_to_title[clip_hash]
+        if module_title is None or clip_title is None:
+            return None
+
+        return Video(module_title, clip_title, hashed_video.video_path)
 
     return hashed_to_video
 
 
 def save_videos(videos, course_title):
     output_path = './output'
+    course_title = course_title.replace('/', '')
 
     for video in videos:
-        module_path = os.path.join(output_path, course_title, video.module_title)
-        if not os.path.exists(module_path):
-            os.makedirs(module_path)
-        copyfile(video.video_path, os.path.join(module_path, video.clip_title + '.mp4'))
+        if video is None:
+            continue
+
+        video.module_title = video.module_title.replace('/', '')
+        video.clip_title = video.clip_title.replace('/', '')
+        try:
+            module_path = os.path.join(output_path, course_title, video.module_title)
+            if not os.path.exists(module_path):
+                os.makedirs(module_path)
+
+            target_path = os.path.join(module_path, video.clip_title + '.mp4')
+        except Exception as e:
+            print(f"Couldn't create target path: ${target_path}")
+
+        try:
+            copyfile(video.video_path, target_path)
+        except Exception as e:
+            print(f"Couldn't copy video from ${video.video_path} to ${target_path} because of ${e}")
 
 
 def is_pluralsight_course(dir_path):
