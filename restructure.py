@@ -36,6 +36,13 @@ def lookup_json(course_dir):
     return json_list[0]
 
 
+def extract_key(json):
+	key = json['id']
+	if 'name' in json:
+		key += json['name']
+
+	return key
+
 def restructure_course(course_dir):
     if not is_pluralsight_course(course_dir):
         return
@@ -55,10 +62,10 @@ def restructure_course(course_dir):
     module_id_to_title = {}
     clip_id_to_title = {}
     for module_index, module in enumerate(meta_data['modules']):
-        module_id_to_title[module['id']] = str(module_index + 1) + '. ' + module['title']
+        module_id_to_title[extract_key(module)] = str(module_index + 1) + '. ' + module['title']
 
         for clip_index, clip in enumerate(module['clips']):
-            clip_id_to_title[clip['id']] = str(clip_index + 1) + '. ' + clip['title']
+            clip_id_to_title[extract_key(clip)] = str(clip_index + 1) + '. ' + clip['title']
 
     hashed_to_video = build_hashed_to_videos()
     videos = map(lambda hashed_video: hashed_to_video(hashed_video, module_id_to_title, clip_id_to_title), hashed_videos)
