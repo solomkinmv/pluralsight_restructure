@@ -37,10 +37,6 @@ def lookup_json(course_dir):
 
 
 def extract_key(json):
-	#key = json['id']
-	#if 'name' in json:
-	#	key += json['name']
-
 	return (json['id'], json['name'])
 
 def restructure_course(course_dir):
