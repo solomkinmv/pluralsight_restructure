@@ -37,11 +37,11 @@ def lookup_json(course_dir):
 
 
 def extract_key(json):
-	key = json['id']
-	if 'name' in json:
-		key += json['name']
+	#key = json['id']
+	#if 'name' in json:
+	#	key += json['name']
 
-	return key
+	return (json['id'], json['name'])
 
 def restructure_course(course_dir):
     if not is_pluralsight_course(course_dir):
@@ -103,7 +103,7 @@ def read_json(file_name):
 def lookup_title_by_hash(id_part, id_to_title_map):
     results = []
     for key in id_to_title_map:
-        if id_part in key:
+        if id_part in key[0] or id_part == key[1]:
             results.append(id_to_title_map[key])
 
     if len(results) != 1:
